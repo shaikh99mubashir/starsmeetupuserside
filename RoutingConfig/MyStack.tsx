@@ -24,6 +24,13 @@ import NewPassword from '../Screens/NewPassword';
 import Profile from '../Screens/Profile';
 import BookAppointment from '../Screens/BookAppointment';
 import ProceedToCheckout from '../Screens/ProceedToCheckout';
+import EnrollStar from '../Screens/EnrollStar';
+import PersonalDetails from '../Screens/PersonalDetails';
+import ChangePassword from '../Screens/ChangePassword';
+import PrivacyPolicy from '../Screens/PrivacyPolicy';
+import TermOfUse from '../Screens/TermOfUse';
+import FAQs from '../Screens/FAQs';
+import ContactUs from '../Screens/ContactUs';
 
 const Stack = createStackNavigator();
 
@@ -51,9 +58,16 @@ const MyStack = () => {
         <Stack.Screen name="AnchorsScreen" component={AnchorsScreen} />
         <Stack.Screen name="SportsScreen" component={SportsScreen} />
         <Stack.Screen name="TiktokScreen" component={TiktokScreen} />
-        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="CelebrityProfile" component={Profile} />
         <Stack.Screen name="BookAppointment" component={BookAppointment} />
         <Stack.Screen name="ProceedToCheckout" component={ProceedToCheckout} />
+        <Stack.Screen name="EnrollStar" component={EnrollStar} />
+        <Stack.Screen name="PersonalDetails" component={PersonalDetails} />
+        <Stack.Screen name="ChangePassword" component={ChangePassword} />
+        <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+        <Stack.Screen name="TermOfUse" component={TermOfUse} />
+        <Stack.Screen name="FAQs" component={FAQs} />
+        <Stack.Screen name="ContactUs" component={ContactUs} />
       </Stack.Navigator>
     </NavigationContainer>
   );

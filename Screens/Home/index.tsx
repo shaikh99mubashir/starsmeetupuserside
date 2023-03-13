@@ -399,7 +399,7 @@ const Home = ({navigation}: any) => {
         <TouchableOpacity
           onPress={
             user
-              ? () => navigation.navigate('Profile', {data: item})
+              ? () => navigation.navigate('CelebrityProfile', {data: item})
               : () => navigation.navigate('Login')
           }
           activeOpacity={0.8}
