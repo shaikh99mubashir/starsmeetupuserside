@@ -31,6 +31,9 @@ import PrivacyPolicy from '../Screens/PrivacyPolicy';
 import TermOfUse from '../Screens/TermOfUse';
 import FAQs from '../Screens/FAQs';
 import ContactUs from '../Screens/ContactUs';
+import AppointmentDetail from '../Screens/AppointmentDetail';
+import PendingShouOutDetail from '../Screens/PendingShouOutDetail';
+import CompletedShouOutDetail from '../Screens/CompletedShouOutDetail';
 
 const Stack = createStackNavigator();
 
@@ -68,6 +71,15 @@ const MyStack = () => {
         <Stack.Screen name="TermOfUse" component={TermOfUse} />
         <Stack.Screen name="FAQs" component={FAQs} />
         <Stack.Screen name="ContactUs" component={ContactUs} />
+        <Stack.Screen name="AppointmentDetail" component={AppointmentDetail} />
+        <Stack.Screen
+          name="PendingShouOutDetail"
+          component={PendingShouOutDetail}
+        />
+        <Stack.Screen
+          name="CompletedShouOutDetail"
+          component={CompletedShouOutDetail}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

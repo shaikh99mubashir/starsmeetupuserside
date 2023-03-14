@@ -51,6 +51,7 @@ const Appointments = ({navigation}: any) => {
       type: 'Audio Call',
       time: '20:00',
       image: require('../../Images/actors.png'),
+      task: 'Completed',
     },
     {
       name: 'ashir',
@@ -58,6 +59,7 @@ const Appointments = ({navigation}: any) => {
       type: 'Audio Call',
       time: '20:00',
       image: require('../../Images/actors.png'),
+      task: 'NoShow',
     },
   ];
   const activateTab = (index: any) => {
@@ -84,30 +86,138 @@ const Appointments = ({navigation}: any) => {
     return (
       <View style={{marginBottom: 10, justifyContent: 'space-between'}}>
         <TouchableOpacity
+          onPress={() => navigation.navigate('AppointmentDetail', item)}
+          activeOpacity={0.8}
           style={{
+            width: Dimensions.get('window').width / 1.1,
             borderWidth: 1,
-            padding: 10,
-            borderRadius: 10,
+            borderColor: Color.mainColor,
+            borderRadius: 5,
+            marginHorizontal: 5,
+            paddingVertical: 5,
+            paddingHorizontal: 5,
             flexDirection: 'row',
-            gap: 20,
             alignItems: 'center',
+            justifyContent: 'space-between',
           }}>
-          <Image
-            source={item.image}
-            style={{width: 65, height: 75, borderRadius: 10}}
-          />
-          <View>
-            <Text>{item.name}</Text>
-            <Text>{item.date}</Text>
+          <View style={{flexDirection: 'row', gap: 20, alignItems: 'center'}}>
+            <Image
+              source={item.image}
+              style={{width: 65, height: 65, borderRadius: 10}}
+            />
+            <View style={{flexDirection: 'column'}}>
+              <Text
+                style={{
+                  fontFamily: 'Poppins-Regular',
+                  color: Color.mainColor,
+                  fontSize: 18,
+                }}>
+                {item.name}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'Poppins-Regular',
+                  color: Color.textColor,
+                  fontSize: 14,
+                }}>
+                {item.date}
+              </Text>
+            </View>
           </View>
-          <View>
-            <Text>HEllo</Text>
+          <View style={{alignItems: 'center'}}>
+            <Text
+              style={{
+                color: 'red',
+                fontSize: 14,
+                fontFamily: 'Poppins-Regular',
+              }}>
+              {item.type}
+            </Text>
+            <Text
+              style={{
+                color: Color.textColor,
+                fontSize: 14,
+                fontFamily: 'Poppins-Regular',
+              }}>
+              {item.time}
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
     );
   };
-  const renderUpHistoryData: any = ({item}: any) => {};
+  const renderUpHistoryData: any = ({item}: any) => {
+    return (
+      <View style={{marginBottom: 10, justifyContent: 'space-between'}}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('AppointmentDetail', item)}
+          activeOpacity={0.8}
+          style={{
+            width: Dimensions.get('window').width / 1.1,
+            borderWidth: 1,
+            borderColor: Color.mainColor,
+            borderRadius: 5,
+            marginHorizontal: 5,
+            paddingVertical: 5,
+            paddingHorizontal: 5,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <View style={{flexDirection: 'row', gap: 20, alignItems: 'center'}}>
+            <Image
+              source={item.image}
+              style={{width: 65, height: 65, borderRadius: 10}}
+            />
+            <View style={{flexDirection: 'column'}}>
+              <Text
+                style={{
+                  fontFamily: 'Poppins-Regular',
+                  color: item.task == 'Completed' ? 'green' : 'red',
+                  fontSize: 14,
+                }}>
+                {item.task}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'Poppins-Regular',
+                  color: Color.mainColor,
+                  fontSize: 18,
+                }}>
+                {item.name}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'Poppins-Regular',
+                  color: Color.textColor,
+                  fontSize: 14,
+                }}>
+                {item.date}
+              </Text>
+            </View>
+          </View>
+          <View style={{alignItems: 'center'}}>
+            <Text
+              style={{
+                color: 'red',
+                fontSize: 14,
+                fontFamily: 'Poppins-Regular',
+              }}>
+              {item.type}
+            </Text>
+            <Text
+              style={{
+                color: Color.textColor,
+                fontSize: 14,
+                fontFamily: 'Poppins-Regular',
+              }}>
+              {item.time}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
   const firstRoute = useCallback(() => {
     return (
       <View style={{marginVertical: 20}}>
