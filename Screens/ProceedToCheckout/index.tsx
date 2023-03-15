@@ -13,37 +13,16 @@ import Color from '../../Constants/Color';
 import Header from '../../Component/Header';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import AudioRecord from 'react-native-audio-record';
+import { Permission } from 'react-native-permissions';
+import Sound from 'react-native-sound';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 const ProceedToCheckout = ({navigation, route}: any) => {
   const data = route.params.data;
-  console.log('data', data);
+  // console.log('data', data);
 
   const [user, setUser] = useState(true);
   const currentDate = new Date();
 
-  const dayNames = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-  ];
-  const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
 
   const currentDateString = currentDate.toLocaleString('en-US', {
     hour: 'numeric',
@@ -57,52 +36,7 @@ const ProceedToCheckout = ({navigation, route}: any) => {
     year: 'numeric',
   });
 
-  //   console.log(currentDateString);
-
   const [message, setMessage] = useState('');
-  const [isRecording, setIsRecording] = useState(false);
-
-  const handleStartRecording = async () => {
-    const options = {
-      sampleRate: 16000,
-      channels: 1,
-      bitsPerSample: 16,
-      wavFile: 'test.wav',
-    };
-
-    AudioRecord.init(options);
-    AudioRecord.start();
-    setIsRecording(true);
-  };
-
-  const handleStopRecording = () => {
-    AudioRecord.stop();
-    setIsRecording(false);
-  };
-
-  const [duration, setDuration] = useState(0);
-
-  const handleRecordPress = () => {
-    setIsRecording(true);
-    // Start recording and update duration
-  };
-
-  const handleStopPress = () => {
-    setIsRecording(false);
-    // Stop recording and save audio file
-  };
-
-  const handlePlayPress = () => {
-    // Start playing audio file
-  };
-
-  const handlePausePress = () => {
-    // Pause audio playback
-  };
-
-  const handleDeletePress = () => {
-    // Delete audio file
-  };
 
   return (
     <View
@@ -250,40 +184,9 @@ const ProceedToCheckout = ({navigation, route}: any) => {
             style={{borderWidth: 1, borderRadius: 10}}
           />
         </View>
-        <View>
-          {isRecording ? (
-            <Button title="Stop recording" onPress={handleStopRecording} />
-          ) : (
-            <Button title="Start recording" onPress={handleStartRecording} />
-          )}
-        </View>
+       
 
-        <View>
-          {isRecording ? (
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Icon name="mic" size={24} />
-              <Text>{duration} sec</Text>
-              <TouchableOpacity onPress={handleStopPress}>
-                <Icon name="stop" size={24} />
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <TouchableOpacity onPress={handleRecordPress}>
-              <Icon name="mic" size={64} />
-            </TouchableOpacity>
-          )}
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <TouchableOpacity onPress={handlePlayPress}>
-              <Icon name="play-arrow" size={24} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handlePausePress}>
-              <Icon name="pause" size={24} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleDeletePress}>
-              <Icon name="delete" size={24} />
-            </TouchableOpacity>
-          </View>
-        </View>
+        
       </ScrollView>
     </View>
   );

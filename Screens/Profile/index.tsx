@@ -381,6 +381,7 @@ const Profile = ({navigation, route}: any) => {
               activeOpacity={0.8}
               onPress={() =>
                 navigation.navigate('BookAppointment', {data: data})
+                // console.log('run')
               }
               style={{
                 alignItems: 'center',
