@@ -372,7 +372,7 @@ const Home = ({navigation}: any) => {
 
   const renderCategoriesItems = ({item}: any): any => {
     return (
-      <View style={{paddingRight: 10, marginBottom: 10,}}>
+      <View style={{paddingRight: 10, marginBottom: 10}}>
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={
@@ -382,9 +382,9 @@ const Home = ({navigation}: any) => {
           }>
           <Image
             source={item.image}
-            resizeMode="contain"
+            resizeMode="cover"
             style={{
-              width:145,
+              width: 145,
               height: 85,
               borderRadius: 10,
             }}
@@ -425,7 +425,7 @@ const Home = ({navigation}: any) => {
               fontSize: 18,
               color: Color.textColor,
             }}>
-            {item.name.length > 8 ? `${item.name.slice(0,8)}...` : item.name}
+            {item.name.length > 8 ? `${item.name.slice(0, 8)}...` : item.name}
           </Text>
         </TouchableOpacity>
       </View>
@@ -688,10 +688,7 @@ const Home = ({navigation}: any) => {
           flexDirection: 'row',
           alignItems: 'center',
         }}>
-        <TextInput
-          placeholder="Search"
-          style={{width: '90%', padding: 12,}}
-        />
+        <TextInput placeholder="Search" style={{width: '90%', padding: 12}} />
         <TouchableOpacity onPress={() => navigation}>
           <Text>
             <Icon name="search" size={25} color="black" />

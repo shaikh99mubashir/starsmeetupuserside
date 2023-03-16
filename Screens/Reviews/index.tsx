@@ -54,7 +54,7 @@ const Reviews = ({navigation}: any) => {
     },
   ]);
   const [myRating, setMyRating] = useState('');
-  const ratingFunction = (e: any): any => {
+  const ratingFunction = (e: any, i: number): any => {
     setMyRating(e.rating);
     setUserRatingStars(
       userRatingStars.map((rate, i) => {
@@ -131,7 +131,7 @@ const Reviews = ({navigation}: any) => {
                   <View key={i} style={{alignContent: 'center'}}>
                     <TouchableOpacity
                       activeOpacity={0.8}
-                      onPress={() => ratingFunction(e)}>
+                      onPress={() => ratingFunction(e, i)}>
                       <Icon
                         name="star-sharp"
                         size={20}
