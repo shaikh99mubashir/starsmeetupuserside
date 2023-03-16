@@ -66,6 +66,7 @@ const Profile = ({navigation, route}: any) => {
   const [value, setValue] = useState(null);
   const [supportStarOpen, setSupportStarOpen] = useState(false);
   const [supportStarValue, setSupportStarValue] = useState(null);
+  const [showAdvanceFilter, setShowAdvanceFilter] = useState(false);
   const [favourites, setFavourites] = useState(false);
   const servicesData = [
     {
@@ -261,7 +262,7 @@ const Profile = ({navigation, route}: any) => {
     },
   ]);
 
-  console.log(data.videoLink, 'link');
+  // console.log(data.videoLink, 'link');
 
   useEffect(() => {
     value &&
@@ -274,6 +275,25 @@ const Profile = ({navigation, route}: any) => {
   }, [value]);
 
   console.log(selectedData, 'selected');
+
+  const filterAdvance = [
+    {
+      id: 1,
+      name: 'Status',
+      image: require('../../Images/coffee.png'),
+    },
+    {
+      id: 2,
+      name: 'Non Smoker',
+      image: require('../../Images/coffee.png'),
+    },
+  ];
+  const [FilterModaldata, setFilterModaldata]: any = useState([]);
+  const SelectedAdvanceFilter = (item: any) => {
+    console.log(item);
+    setFilterModaldata(item);
+    // setShowAdvanceFilter(!showAdvanceFilter);
+  };
 
   return (
     <View
@@ -379,8 +399,8 @@ const Profile = ({navigation, route}: any) => {
             }}>
             <TouchableOpacity
               activeOpacity={0.8}
-              onPress={() =>
-                navigation.navigate('BookAppointment', {data: data})
+              onPress={
+                () => navigation.navigate('BookAppointment', {data: data})
                 // console.log('run')
               }
               style={{
@@ -407,10 +427,12 @@ const Profile = ({navigation, route}: any) => {
                 placeholderStyle={{
                   color: Color.mainColor,
                 }}
+                style={{backgroundColor: 'pink'}}
                 showArrowIcon={true}
                 selectedItemLabelStyle={{
                   fontWeight: 'bold',
                   color: Color.mainColor,
+                  backgroundColor: 'white',
                 }}
                 open={supportStarOpen}
                 value={supportStarValue}
@@ -456,19 +478,122 @@ const Profile = ({navigation, route}: any) => {
             marginTop: 30,
             top: -120,
           }}></View>
-        {/* Video */}
-        <View style={{top: -120, marginHorizontal: 10}}></View>
 
-        <Video
-          source={{
-            uri: 'https://jsoncompare.org/LearningContainer/SampleFiles/Video/MP4/Sample-MP4-Video-File-for-Testing.mp4',
-          }} // Can be a URL or a local file.
-          repeat={true}
-          controls={true}
-          onLoad={load => console.log(load, 'load')} // Store reference
-          onError={error => console.log(error, 'error')} // Callback when video cannot be loaded
-          style={styles.backgroundVideo}
-        />
+        <View
+          style={{
+            backgroundColor: '#fff',
+            justifyContent: 'center',
+            paddingVertical: 20,
+            marginTop: 20,
+            top: -100,
+          }}>
+          <TouchableOpacity
+            onPress={() => setShowAdvanceFilter(!showAdvanceFilter)}
+            style={{
+              marginHorizontal: 20,
+              marginTop: -10,
+              alignItems: 'center',
+              alignSelf: 'center',
+              // padding:5,
+              borderRadius: 8,
+              width: '95%',
+              height: 30,
+              justifyContent: 'center',
+              borderWidth: 1,
+            }}>
+            {FilterModaldata && Object.keys(FilterModaldata).length > 0 ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  width: '100%',
+                }}>
+                <Text>{FilterModaldata.name}</Text>
+                <Icon name="chevron-up-sharp" size={20} color="blue" />
+              </View>
+            ) : (
+              <Icon name="chevron-down-sharp" size={20} color="black" />
+            )}
+          </TouchableOpacity>
+
+          {showAdvanceFilter == true &&
+            filterAdvance.map((item, index) => (
+              <TouchableOpacity
+                onPress={() => SelectedAdvanceFilter(item)}
+                key={index}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  paddingHorizontal: 20,
+                  marginBottom: 20,
+                }}>
+                <View
+                  style={{
+                    flex: 1,
+                  }}>
+                  <Image
+                    source={item.image}
+                    resizeMode="contain"
+                    style={{
+                      width: 40,
+                      height: 40,
+                    }}
+                  />
+                </View>
+                <View
+                  style={{
+                    flex: 4,
+                    alignItems: 'flex-start',
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      color: COLORS.textColor,
+                    }}>
+                    {item.name}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'flex-end',
+                  }}>
+                  <Image
+                    source={require('../../Images/dropdown.png')}
+                    resizeMode="contain"
+                    style={{
+                      width: 20,
+                      height: 20,
+                      tintColor: COLORS.textColor,
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
+            ))}
+        </View>
+        <View
+          style={{
+            borderWidth: 1,
+            borderColor: '#CCCCCC',
+            marginTop: 30,
+            top: -120,
+          }}></View>
+
+        {/* Video */}
+        {/* <View style={{top: -100, marginHorizontal: 10}}></View> */}
+        <View style={{top: -50}}>
+          <Video
+            source={{
+              uri: 'https://jsoncompare.org/LearningContainer/SampleFiles/Video/MP4/Sample-MP4-Video-File-for-Testing.mp4',
+            }} // Can be a URL or a local file.
+            repeat={true}
+            controls={true}
+            onLoad={load => console.log(load, 'load')} // Store reference
+            onError={error => console.log(error, 'error')} // Callback when video cannot be loaded
+            style={styles.backgroundVideo}
+          />
+        </View>
       </ScrollView>
     </View>
   );
