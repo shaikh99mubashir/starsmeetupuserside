@@ -12,17 +12,14 @@ import React, {useState} from 'react';
 import Color from '../../Constants/Color';
 import Header from '../../Component/Header';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import AudioRecord from 'react-native-audio-record';
-import { Permission } from 'react-native-permissions';
+import {AudioRecorder, AudioUtils} from 'react-native-audio';
 import Sound from 'react-native-sound';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 const ProceedToCheckout = ({navigation, route}: any) => {
   const data = route.params.data;
   // console.log('data', data);
 
   const [user, setUser] = useState(true);
   const currentDate = new Date();
-
 
   const currentDateString = currentDate.toLocaleString('en-US', {
     hour: 'numeric',
@@ -184,9 +181,6 @@ const ProceedToCheckout = ({navigation, route}: any) => {
             style={{borderWidth: 1, borderRadius: 10}}
           />
         </View>
-       
-
-        
       </ScrollView>
     </View>
   );

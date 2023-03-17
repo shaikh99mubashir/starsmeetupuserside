@@ -1,9 +1,15 @@
-import {StyleSheet, Text, View, ScrollView, Dimensions} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useState} from 'react';
 import Color from '../../Constants/Color';
 import Header from '../../Component/Header';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const BookAppointment = ({navigation, onDateSelect, route}: any) => {
   const data = route.params.data;

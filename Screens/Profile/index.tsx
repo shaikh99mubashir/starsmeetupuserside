@@ -5,22 +5,27 @@ import {
   Dimensions,
   Image,
   ScrollView,
+  Modal,
+  TouchableOpacity,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import Color from '../../Constants/Color';
 import Header from '../../Component/Header';
 import {COLORS} from '../../Constants';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+
 import DropDownPicker from 'react-native-dropdown-picker';
 import Video from 'react-native-video';
 const Profile = ({navigation, route}: any) => {
   const data = route.params.data;
   const [user, setUser] = useState(true);
-  // console.log('data===>', data.videoLink);
   const [myRating, setMyRating] = useState('');
-  const [selectedData, setSelected] = useState([]);
+  const [showDropDown, setShowDropDown] = useState(false);
+  const [favourites, setFavourites] = useState(false);
+  const [FilterModaldata, setFilterModaldata]: any = useState([]);
+  const [selectedServicedata, setSelectedServicedata]: any = useState([]);
+  const [serviceDD, setServiceDD] = useState(false);
   const [userRatingStars, setUserRatingStars] = useState([
     {
       rating: 0,
@@ -62,44 +67,38 @@ const Profile = ({navigation, route}: any) => {
     );
   };
 
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [supportStarOpen, setSupportStarOpen] = useState(false);
-  const [supportStarValue, setSupportStarValue] = useState(null);
-  const [showAdvanceFilter, setShowAdvanceFilter] = useState(false);
-  const [favourites, setFavourites] = useState(false);
-  const servicesData = [
-    {
-      id: 1,
-      label: 'Audio Call (2 min)',
-      rs: 'PKR 5,000',
-      value: 'Audio Call (2 min)',
-    },
-    {
-      id: 2,
-      label: 'Video Call (2 min)',
-      rs: 'PKR 10,000',
-      value: 'Video Call (2 min)',
-    },
-    {
-      id: 3,
-      label: 'Audio Shout-out',
-      rs: 'PKR 5,000',
-      value: 'Audio Shout-out',
-    },
-    {
-      id: 4,
-      label: 'Video Shout-out',
-      rs: 'PKR 10,000',
-      value: 'Video Shout-out',
-    },
-    {
-      id: 5,
-      label: 'Ask a Question',
-      rs: 'PKR 2,000',
-      value: 'Ask a Question',
-    },
-  ];
+  // const servicesData = [
+  //   {
+  //     id: 1,
+  //     label: 'Audio Call (2 min)',
+  //     rs: 'PKR 5,000',
+  //     value: 'Audio Call (2 min)',
+  //   },
+  //   {
+  //     id: 2,
+  //     label: 'Video Call (2 min)',
+  //     rs: 'PKR 10,000',
+  //     value: 'Video Call (2 min)',
+  //   },
+  //   {
+  //     id: 3,
+  //     label: 'Audio Shout-out',
+  //     rs: 'PKR 5,000',
+  //     value: 'Audio Shout-out',
+  //   },
+  //   {
+  //     id: 4,
+  //     label: 'Video Shout-out',
+  //     rs: 'PKR 10,000',
+  //     value: 'Video Shout-out',
+  //   },
+  //   {
+  //     id: 5,
+  //     label: 'Ask a Question',
+  //     rs: 'PKR 2,000',
+  //     value: 'Ask a Question',
+  //   },
+  // ];
   // servicesData && servicesData.map((e,i)=>{
   //   return(
   //     e.label: {
@@ -132,185 +131,194 @@ const Profile = ({navigation, route}: any) => {
   //   )
   // })
 
-  useEffect(() => {
-    let item =
-      servicesData &&
-      servicesData.length > 0 &&
-      servicesData.map((e, i) => {
-        let data = {
-          label: (
-            <View
-              style={{
-                flexDirection: 'row',
-                width: Dimensions.get('window').width / 1.5,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                gap: 20,
-              }}>
-              <Text
-                style={{
-                  color: Color.mainColor,
-                  fontFamily: 'Poppins-Regular',
-                  fontSize: 14,
-                }}>
-                {e.label}
-              </Text>
-              <Text
-                style={{
-                  color: Color.mainColor,
-                  fontFamily: 'Poppins-Regular',
-                  fontSize: 14,
-                }}>
-                {e.rs}
-              </Text>
-            </View>
-          ),
-          value: e.value,
-        };
-        return data;
-      });
-    setItems(item);
-  }, []);
+  // useEffect(() => {
+  //   let item =
+  //     servicesData &&
+  //     servicesData.length > 0 &&
+  //     servicesData.map((e, i) => {
+  //       let data = {
+  //         label: (
+  //           <View
+  //             style={{
+  //               flexDirection: 'row',
+  //               width: Dimensions.get('window').width / 1.5,
+  //               justifyContent: 'space-between',
+  //               alignItems: 'center',
+  //               gap: 20,
+  //             }}>
+  //             <Text
+  //               style={{
+  //                 color: Color.mainColor,
+  //                 fontFamily: 'Poppins-Regular',
+  //                 fontSize: 14,
+  //               }}>
+  //               {e.label}
+  //             </Text>
+  //             <Text
+  //               style={{
+  //                 color: Color.mainColor,
+  //                 fontFamily: 'Poppins-Regular',
+  //                 fontSize: 14,
+  //               }}>
+  //               {e.rs}
+  //             </Text>
+  //           </View>
+  //         ),
+  //         value: e.value,
+  //       };
+  //       return data;
+  //     });
+  //   setItems(item);
+  // }, []);
 
-  const [items, setItems]: any = useState([
-    {
-      label: (
-        <View
-          style={{
-            flexDirection: 'row',
-            width: Dimensions.get('window').width / 1.5,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: 20,
-          }}>
-          <Text
-            style={{
-              color: Color.mainColor,
-              fontFamily: 'Poppins-Regular',
-              fontSize: 14,
-            }}>
-            Audio Call (2 min){' '}
-          </Text>
-          <Text
-            style={{
-              color: Color.mainColor,
-              fontFamily: 'Poppins-Regular',
-              fontSize: 14,
-            }}>
-            PKR 5,000
-          </Text>
-        </View>
-      ),
-      value: 'AudioCall-2min',
-    },
-  ]);
+  // const [items, setItems]: any = useState([
+  //   {
+  //     label: (
+  //       <View
+  //         style={{
+  //           flexDirection: 'row',
+  //           width: Dimensions.get('window').width / 1.5,
+  //           justifyContent: 'space-between',
+  //           alignItems: 'center',
+  //           gap: 20,
+  //         }}>
+  //         <Text
+  //           style={{
+  //             color: Color.mainColor,
+  //             fontFamily: 'Poppins-Regular',
+  //             fontSize: 14,
+  //           }}>
+  //           Audio Call (2 min){' '}
+  //         </Text>
+  //         <Text
+  //           style={{
+  //             color: Color.mainColor,
+  //             fontFamily: 'Poppins-Regular',
+  //             fontSize: 14,
+  //           }}>
+  //           PKR 5,000
+  //         </Text>
+  //       </View>
+  //     ),
+  //     value: 'AudioCall-2min',
+  //   },
+  // ]);
 
-  // console.log('valueitem', value);
+  // useEffect(() => {
+  //   value &&
+  //     servicesData.length > 0 &&
+  //     servicesData.map((e: any, i) => {
+  //       if (e.value == value) {
+  //         setSelected(e);
+  //       }
+  //     });
+  // }, [value]);
 
-  const [supportStarItems, setSupportStarItems]: any = useState([
-    {
-      icon: () => <Entypo name="dot-single" size={25} />,
-      label: (
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 20,
-          }}>
-          <Image
-            source={require('../../Images/coffee.png')}
-            resizeMode="contain"
-            style={{width: 30, height: 30}}
-          />
-          <Text
-            style={{
-              color: Color.mainColor,
-              fontFamily: 'Poppins-Regular',
-              fontSize: 14,
-            }}>
-            PKR 5,000
-          </Text>
-        </View>
-      ),
-      value: 'AudioCall-2min',
-    },
-    {
-      icon: () => <Entypo name="dot-single" size={25} />,
-      label: (
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 20,
-          }}>
-          <Image
-            source={require('../../Images/bike.png')}
-            resizeMode="contain"
-            style={{width: 30, height: 30}}
-          />
-          <Text
-            style={{
-              color: Color.mainColor,
-              fontFamily: 'Poppins-Regular',
-              fontSize: 14,
-            }}>
-            PKR 5,000
-          </Text>
-        </View>
-      ),
-      value: 'AudioCall-2min',
-    },
-  ]);
+  // console.log(selectedData, 'selected');
 
-  // console.log(data.videoLink, 'link');
+  const [modalVisible, setModalVisible] = useState(false);
 
-  useEffect(() => {
-    value &&
-      servicesData.length > 0 &&
-      servicesData.map((e: any, i) => {
-        if (e.value == value) {
-          setSelected(e);
-        }
-      });
-  }, [value]);
+  const handleProfileImagePress = () => {
+    console.log('hello world');
+    setModalVisible(true);
+  };
 
-  console.log(selectedData, 'selected');
+  console.log('hello world');
 
-  const filterAdvance = [
+  const handleCloseModal = () => {
+    console.log('Modal Close');
+    setModalVisible(false);
+  };
+
+  const SelectService = [
     {
       id: 1,
-      name: 'Status',
+      service: 'Audio Call (2 min) PKR 5000',
+    },
+    {
+      id: 2,
+      service: 'Video Call (2 min) PKR 10000',
+    },
+  ];
+  const SupportYourStar = [
+    {
+      id: 1,
+      name: 'PKR 5000',
       image: require('../../Images/coffee.png'),
     },
     {
       id: 2,
-      name: 'Non Smoker',
-      image: require('../../Images/coffee.png'),
+      name: 'PKR 10000',
+      image: require('../../Images/bike.png'),
     },
   ];
-  const [FilterModaldata, setFilterModaldata]: any = useState([]);
-  const SelectedAdvanceFilter = (item: any) => {
+
+  const SelectedSupportStar = (item: any) => {
     console.log(item);
     setFilterModaldata(item);
-    // setShowAdvanceFilter(!showAdvanceFilter);
+    setShowDropDown(!showDropDown);
   };
 
+  const SelectedServices = (item: any) => {
+    console.log(item);
+    setSelectedServicedata(item);
+    setServiceDD(!serviceDD);
+  };
+
+  const modal = useCallback(() => {
+    return (
+      <Modal visible={modalVisible} animationType="slide" transparent={true}>
+        <View style={styles.modalContainer}>
+          <Image
+            source={require('../../Images/Asset34.png')}
+            resizeMode="contain"
+            style={{width: Dimensions.get('window').width}}
+          />
+          <TouchableOpacity
+            style={{
+              borderWidth: 1,
+              borderColor: Color.mainColor,
+              paddingVertical: 10,
+              paddingHorizontal: 15,
+              borderRadius: 100,
+            }}
+            onPress={handleCloseModal}>
+            <Text style={styles.closeButtonText}>X</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    );
+  }, [modalVisible]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  console.log(modalVisible, 'visivle');
+  const handleImagePress = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+  };
   return (
     <View
       style={{
         backgroundColor: Color.backgroundColor,
         height: Dimensions.get('window').height,
       }}>
-      <ScrollView style={{height: '100%'}}>
+      <View>{modalVisible && modal()}</View>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View>
-          <Image
-            source={require('../../Images/Asset34.png')}
-            resizeMode="cover"
-            style={[
-              styles.coverImage,
-              {borderBottomLeftRadius: 50, borderBottomRightRadius: 50},
-            ]}
-          />
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={handleProfileImagePress}>
+            <Image
+              source={require('../../Images/Asset34.png')}
+              resizeMode="cover"
+              style={[
+                styles.coverImage,
+                {borderBottomLeftRadius: 50, borderBottomRightRadius: 50},
+              ]}
+            />
+          </TouchableOpacity>
           <View style={{position: 'absolute', left: 10, top: 10}}>
             <Header
               navigation={navigation}
@@ -320,7 +328,10 @@ const Profile = ({navigation, route}: any) => {
               style={styles.HeaderStyle}
             />
           </View>
-          <View style={{alignItems: 'center', top: -140}}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={handleProfileImagePress}
+            style={{alignItems: 'center', top: -140}}>
             <Image
               source={require('../../Images/Asset34.png')}
               resizeMode="cover"
@@ -329,7 +340,7 @@ const Profile = ({navigation, route}: any) => {
                 {borderRadius: 10, borderColor: 'white', borderWidth: 2},
               ]}
             />
-          </View>
+          </TouchableOpacity>
           <View style={{alignItems: 'center', top: -140}}>
             <Text
               style={{
@@ -373,20 +384,88 @@ const Profile = ({navigation, route}: any) => {
         </View>
         <View style={{marginHorizontal: 10, top: -120}}>
           {/* Dropdown */}
-          <View style={{zIndex: 100}}>
-            <DropDownPicker
-              placeholder="Select Service"
-              placeholderStyle={{
-                color: Color.mainColor,
-              }}
-              open={open}
-              value={value}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
-            />
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 10,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <View
+              style={{
+                backgroundColor: '#fff',
+                width: '95%',
+              }}>
+              <TouchableOpacity
+                onPress={() => setServiceDD(!serviceDD)}
+                style={{
+                  marginHorizontal: 20,
+                  marginTop: -10,
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  padding: 10,
+                  borderRadius: 8,
+                  width: '100%',
+                  height: 50,
+                  justifyContent: 'center',
+                  borderWidth: 1,
+                }}>
+                {selectedServicedata &&
+                Object.keys(selectedServicedata).length > 0 ? (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      width: '100%',
+                    }}>
+                    <Text style={{color: 'black'}}>
+                      {selectedServicedata.service}
+                    </Text>
+                    {serviceDD ? (
+                      <Icon name="chevron-up-sharp" size={20} color="black" />
+                    ) : (
+                      <Icon name="chevron-down-sharp" size={20} color="black" />
+                    )}
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      width: '100%',
+                    }}>
+                    <Text style={{color: Color.mainColor}}>Select Service</Text>
+                    {serviceDD ? (
+                      <Icon name="chevron-up-sharp" size={20} color="black" />
+                    ) : (
+                      <Icon name="chevron-down-sharp" size={20} color="black" />
+                    )}
+                  </View>
+                )}
+              </TouchableOpacity>
+            </View>
           </View>
+          {serviceDD == true &&
+            SelectService.map((item, index) => (
+              <TouchableOpacity
+                onPress={() => SelectedServices(item)}
+                key={index}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingHorizontal: 20,
+                  marginVertical: 5,
+                  gap: 10,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: COLORS.mainColor,
+                  }}>
+                  {item.service}
+                </Text>
+              </TouchableOpacity>
+            ))}
           {/* Book Appointment */}
           <View
             style={{
@@ -419,37 +498,77 @@ const Profile = ({navigation, route}: any) => {
             </TouchableOpacity>
           </View>
           {/* Support Your Star */}
-          <View style={{flexDirection: 'row', gap: 5, alignItems: 'center'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 10,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
             <View
-              style={{zIndex: 2, width: Dimensions.get('window').width / 1.25}}>
-              <DropDownPicker
-                placeholder="Support Your Star"
-                placeholderStyle={{
-                  color: Color.mainColor,
-                }}
-                style={{backgroundColor: 'pink'}}
-                showArrowIcon={true}
-                selectedItemLabelStyle={{
-                  fontWeight: 'bold',
-                  color: Color.mainColor,
-                  backgroundColor: 'white',
-                }}
-                open={supportStarOpen}
-                value={supportStarValue}
-                items={supportStarItems}
-                setOpen={setSupportStarOpen}
-                setValue={setSupportStarValue}
-                setItems={setSupportStarItems}
-              />
+              style={{
+                backgroundColor: '#fff',
+                width: Dimensions.get('window').width / 1.3,
+              }}>
+              <TouchableOpacity
+                onPress={() => setShowDropDown(!showDropDown)}
+                style={{
+                  marginHorizontal: 20,
+                  marginTop: -10,
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  padding: 10,
+                  borderRadius: 8,
+                  width: '100%',
+                  height: 50,
+                  justifyContent: 'center',
+                  borderWidth: 1,
+                }}>
+                {FilterModaldata && Object.keys(FilterModaldata).length > 0 ? (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      width: '100%',
+                    }}>
+                    <Text style={{color: 'black'}}>{FilterModaldata.name}</Text>
+                    {showDropDown ? (
+                      <Icon name="chevron-up-sharp" size={20} color="black" />
+                    ) : (
+                      <Icon name="chevron-down-sharp" size={20} color="black" />
+                    )}
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      width: '100%',
+                    }}>
+                    <Text style={{color: Color.mainColor}}>
+                      Support Your Star
+                    </Text>
+                    {showDropDown ? (
+                      <Icon name="chevron-up-sharp" size={20} color="black" />
+                    ) : (
+                      <Icon name="chevron-down-sharp" size={20} color="black" />
+                    )}
+                  </View>
+                )}
+              </TouchableOpacity>
             </View>
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => setFavourites(!favourites)}
               style={{
                 borderWidth: 1,
-                padding: 10,
                 borderRadius: 10,
                 alignItems: 'center',
+                marginTop: -10,
+                alignSelf: 'center',
+                padding: 10,
+                height: 50,
+                justifyContent: 'center',
               }}>
               <Entypo
                 name="heart"
@@ -458,6 +577,37 @@ const Profile = ({navigation, route}: any) => {
               />
             </TouchableOpacity>
           </View>
+          {showDropDown == true &&
+            SupportYourStar.map((item, index) => (
+              <TouchableOpacity
+                onPress={() => SelectedSupportStar(item)}
+                key={index}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingHorizontal: 20,
+                  marginVertical: 5,
+                  gap: 10,
+                }}>
+                <Entypo name="dot-single" size={25} />
+                <Image
+                  source={item.image}
+                  resizeMode="contain"
+                  style={{
+                    width: 40,
+                    height: 40,
+                  }}
+                />
+
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: COLORS.mainColor,
+                  }}>
+                  {item.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
         </View>
         <View
           style={{
@@ -466,6 +616,7 @@ const Profile = ({navigation, route}: any) => {
             marginTop: 30,
             top: -120,
           }}></View>
+        {/* about Star */}
         <View style={{top: -120, marginHorizontal: 10}}>
           <View style={{marginTop: 20}}>
             <Text style={{color: Color.textColor}}>{data.title}</Text>
@@ -479,106 +630,7 @@ const Profile = ({navigation, route}: any) => {
             top: -120,
           }}></View>
 
-        <View
-          style={{
-            backgroundColor: '#fff',
-            justifyContent: 'center',
-            paddingVertical: 20,
-            marginTop: 20,
-            top: -100,
-          }}>
-          <TouchableOpacity
-            onPress={() => setShowAdvanceFilter(!showAdvanceFilter)}
-            style={{
-              marginHorizontal: 20,
-              marginTop: -10,
-              alignItems: 'center',
-              alignSelf: 'center',
-              // padding:5,
-              borderRadius: 8,
-              width: '95%',
-              height: 30,
-              justifyContent: 'center',
-              borderWidth: 1,
-            }}>
-            {FilterModaldata && Object.keys(FilterModaldata).length > 0 ? (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  width: '100%',
-                }}>
-                <Text>{FilterModaldata.name}</Text>
-                <Icon name="chevron-up-sharp" size={20} color="blue" />
-              </View>
-            ) : (
-              <Icon name="chevron-down-sharp" size={20} color="black" />
-            )}
-          </TouchableOpacity>
-
-          {showAdvanceFilter == true &&
-            filterAdvance.map((item, index) => (
-              <TouchableOpacity
-                onPress={() => SelectedAdvanceFilter(item)}
-                key={index}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  paddingHorizontal: 20,
-                  marginBottom: 20,
-                }}>
-                <View
-                  style={{
-                    flex: 1,
-                  }}>
-                  <Image
-                    source={item.image}
-                    resizeMode="contain"
-                    style={{
-                      width: 40,
-                      height: 40,
-                    }}
-                  />
-                </View>
-                <View
-                  style={{
-                    flex: 4,
-                    alignItems: 'flex-start',
-                  }}>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      color: COLORS.textColor,
-                    }}>
-                    {item.name}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: 'flex-end',
-                  }}>
-                  <Image
-                    source={require('../../Images/dropdown.png')}
-                    resizeMode="contain"
-                    style={{
-                      width: 20,
-                      height: 20,
-                      tintColor: COLORS.textColor,
-                    }}
-                  />
-                </View>
-              </TouchableOpacity>
-            ))}
-        </View>
-        <View
-          style={{
-            borderWidth: 1,
-            borderColor: '#CCCCCC',
-            marginTop: 30,
-            top: -120,
-          }}></View>
+        {/* {modalVisible && modal()} */}
 
         {/* Video */}
         {/* <View style={{top: -100, marginHorizontal: 10}}></View> */}
@@ -618,5 +670,24 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height / 2,
     width: Dimensions.get('window').width,
     marginBottom: 10,
+  },
+
+  modalContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 20,
+    textAlign: 'right',
   },
 });

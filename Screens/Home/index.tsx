@@ -14,6 +14,7 @@ import Color from '../../Constants/Color';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../Constants';
 import {ScrollView} from 'react-native-gesture-handler';
+import PictureModal from '../../Component/PictureModal';
 const Home = ({navigation}: any) => {
   const [user, setUser] = useState(true);
 
