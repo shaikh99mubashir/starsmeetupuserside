@@ -174,15 +174,13 @@ const CreatorsScreen = ({navigation}: any) => {
                       alignItems: 'center',
                       borderRadius: 10,
                       marginTop: 10,
-                      width: '50%',
+                      width: '48%',
                       justifyContent: 'space-between',
                     }}>
                     <Image
                       source={e.image}
                       resizeMode="cover"
                       style={{
-                        width: 170,
-                        height: 180,
                         borderRadius: 10,
                         shadowOffset: {width: 0, height: 3},
                         shadowOpacity: 0.4,
@@ -238,7 +236,7 @@ const CreatorsScreen = ({navigation}: any) => {
                       source={e.image}
                       resizeMode="cover"
                       style={{
-                        width: 170,
+                        width: Dimensions.get('window').width / 2 - 25,
                         height: 180,
                         borderRadius: 10,
                         shadowOffset: {width: 0, height: 3},
